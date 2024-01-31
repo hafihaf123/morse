@@ -80,7 +80,8 @@ struct MorseMap map[] = {
 	{'-', "-....-"},
 	{'_', "..--.-"},
 	{'$', "...-..-"},
-	{'@', ".--.-."}
+	{'@', ".--.-."},
+	{' ', "/"}
 };
 
 char* getMorse(char c) {
@@ -100,17 +101,50 @@ char* getStringMorse(char* ex) {
 		char* morse = getMorse(ex[i]);
 		res = realloc(res, strlen(res) + strlen(morse) + 2);
 		strcat(res, morse);
+		free(morse);
 		strcat(res, " ");
+	}
+	return res;
+}
+
+char getSymbol(char* code) {
+	for (int i = 0; i < sizeof(map) / sizeof(map[0]); i++) {
+		if (strcmp(code, map[i].morseCode)) {
+			return map[i].symbol;
+		}
+	}
+	return 191;
+}
+
+char* decode(char* ex) {
+	char* res = strdup("");
+	char* token = strtok(ex, " ");
+
+	while (token != NULL) {
+		char c = getSymbol(token);
+		strcat(res, &c);
+		token = strtok(NULL, " ");
 	}
 	return res;
 }
 
 int main () {
 	printf("enter the expression:\n");
-	char text[20];
+	char text[100];
 	fgets(text, sizeof(text), stdin);
 
-	char* res = getStringMorse(text);
+	printf("to or from morse code? (t/f)\n");
+	char toFrom;
+	scanf("%c", &toFrom);
+	
+	char* res;
+	if (toFrom == 't') {
+		res = getStringMorse(text);
+	} else if (toFrom == 'f') {
+		res = decode(text);
+	} else {
+		res = "error, incorrect input";	
+	}
 	printf("%s\n", res);
 
 	//free up memory logic
