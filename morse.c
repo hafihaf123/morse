@@ -109,11 +109,11 @@ char* getStringMorse(char* ex) {
 
 char getSymbol(char* code) {
 	for (int i = 0; i < sizeof(map) / sizeof(map[0]); i++) {
-		if (strcmp(code, map[i].morseCode)) {
+		if (strcmp(code, map[i].morseCode) == 0) {
 			return map[i].symbol;
 		}
 	}
-	return 191;
+	return '?';
 }
 
 char* decode(char* ex) {
@@ -122,7 +122,7 @@ char* decode(char* ex) {
 
 	while (token != NULL) {
 		char c = getSymbol(token);
-		strcat(res, &c);
+		strncat(res, &c, 1);
 		token = strtok(NULL, " ");
 	}
 	return res;
