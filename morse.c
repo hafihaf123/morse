@@ -23,11 +23,64 @@
 
 struct MorseMap {
 	char symbol;
-	char* morseCode
+	char* morseCode;
 };
 
 struct MorseMap map[] = {
-	{'A', ".-"}
+	{'A', ".-"},
+	{'B', "-..."},
+	{'C', "-.-."},
+	{'D', "-.."},
+	{'E', "."},
+	{'F', "..-."},
+	{'G', "--."},
+	{'H', "...."},
+	{'I', ".."},
+	{'J', ".---"},
+	{'K', "-.-"},
+	{'L', ".-.."},
+	{'M', "--"},
+	{'N', "-."},
+	{'O', "---"},
+	{'P', ".--."},
+	{'Q', "--.-"},
+	{'R', ".-."},
+	{'S', "..."},
+	{'T', "-"},
+	{'U', "..-"},
+	{'V', "...-"},
+	{'W', ".--"},
+	{'X', "-..-"},
+	{'Y', "-.--"},
+	{'Z', "--.."},
+	{'0', ""},
+	{'1', ".----"},
+	{'2', "..---"},
+	{'3', "...--"},
+	{'4', "....-"},
+	{'5', "....."},
+	{'6', "-...."},
+	{'7', "--..."},
+	{'8', "---.."},
+	{'9', "----."},
+	{'0', "-----"},
+	{'.', ".-.-.-"},
+	{',', "--..--"},
+	{'?', "..--.."},
+	{'!', "-.-.--"},
+	{':', "---..."},
+	{'"', ".-..-."},
+	{'=', "-...-"},
+	{'/', "-..-."},
+	{'(', "-.--."},
+	{')', "-.--.-"},
+	{'&', ".-..."},
+	{';', "-.-.-."},
+	{'+', ".-.-."},
+	{'-', "-....-"},
+	{'_', "..--.-"},
+	{'$', "...-..-"},
+	{'@', ".--.-."}
 };
 
 char* getMorse(char c) {
@@ -41,11 +94,27 @@ char* getMorse(char c) {
 	return strdup("");
 }
 
+char* getStringMorse(char* ex) {
+	char* res = strdup("");
+	for (int i = 0; i < strlen(ex); i++) {
+		char* morse = getMorse(ex[i]);
+		res = realloc(res, strlen(res) + strlen(morse) + 2);
+		strcat(res, morse);
+		strcat(res, " ");
+	}
+	return res;
+}
+
 int main () {
-	printf("enter the expression:");
+	printf("enter the expression:\n");
 	char text[20];
 	fgets(text, sizeof(text), stdin);
-	printf("%s", text);
+
+	char* res = getStringMorse(text);
+	printf("%s\n", res);
+
+	//free up memory logic
+	free(res);
 
 	return 0;
 }
