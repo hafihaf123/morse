@@ -126,6 +126,12 @@ char* decode(char* ex) {
 
 	while (token != NULL) {
 		char c = getSymbol(token);
+		size_t len = sizeof(res) + 2;
+		res = realloc(res, len);
+		if (res == NULL) {
+			fprintf(stderr, "memory reallocation failed\n");
+			exit(EXIT_FAILURE);
+		}
 		strncat(res, &c, 1);
 		token = strtok(NULL, " ");
 	}
