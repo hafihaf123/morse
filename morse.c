@@ -53,7 +53,6 @@ struct MorseMap map[] = {
 	{'X', "-..-"},
 	{'Y', "-.--"},
 	{'Z', "--.."},
-	{'0', ""},
 	{'1', ".----"},
 	{'2', "..---"},
 	{'3', "...--"},
@@ -99,7 +98,12 @@ char* getStringMorse(char* ex) {
 	char* res = strdup("");
 	for (int i = 0; i < strlen(ex); i++) {
 		char* morse = getMorse(ex[i]);
-		res = realloc(res, strlen(res) + strlen(morse) + 2);
+		size_t len = strlen(res) + strlen(morse) + 2;
+		res = realloc(res, len);
+		if (res == NULL) {
+			fprintf(stderr, "memory reallocation failed\n");
+			exit(EXIT_FAILURE);
+		}
 		strcat(res, morse);
 		free(morse);
 		strcat(res, " ");
