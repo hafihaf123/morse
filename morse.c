@@ -105,6 +105,7 @@ char* getStringMorse(char* ex) {
 			exit(EXIT_FAILURE);
 		}
 		strcat(res, morse);
+		strcat(res, " ");
 		free(morse);
 	}
 	return res;
