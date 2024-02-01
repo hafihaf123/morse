@@ -151,10 +151,9 @@ int main () {
 	char text[100];
 	fgets(text, sizeof(text), stdin);
 
-	/*printf("to or from morse code? (t/f)\n");
-	char toFrom;
-	scanf("%c", &toFrom);*/
-	
+	char *newlinePos = strchr(text, '\n');
+	if (newlinePos != NULL) *newlinePos = '\0';
+
 	char* res;
 	if (containsOnly(text, ".-/")) {
 		res = decode(text);
