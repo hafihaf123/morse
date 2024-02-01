@@ -128,22 +128,35 @@ char* decode(char* ex) {
 	return res;
 }
 
+int containsOnly(char* ex, char* tokens) {
+	int bool = 0;
+	for (int i = 0; i < strlen(ex); i++) {
+		char c = ex[i];
+		for (int ii = 0; ii < strlen(tokens); ii++) {
+			if (tokens[ii] == c) {
+				bool = 1;
+				break;
+			}
+		}
+		if (bool != 1) return bool;
+	}
+	return bool;
+}
+
 int main () {
 	printf("enter the expression:\n");
 	char text[100];
 	fgets(text, sizeof(text), stdin);
 
-	printf("to or from morse code? (t/f)\n");
+	/*printf("to or from morse code? (t/f)\n");
 	char toFrom;
-	scanf("%c", &toFrom);
+	scanf("%c", &toFrom);*/
 	
 	char* res;
-	if (toFrom == 't') {
-		res = getStringMorse(text);
-	} else if (toFrom == 'f') {
+	if (containsOnly(text, ".-/")) {
 		res = decode(text);
 	} else {
-		res = "error, incorrect input";	
+		res = getStringMorse(text);	
 	}
 	printf("%s\n", res);
 
