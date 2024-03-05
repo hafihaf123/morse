@@ -87,11 +87,15 @@ char* getMorse(char c) {
 	for (int i=0; i < sizeof(map) / sizeof(map[0]); i++) {
 		if (toupper(c) == map[i].symbol) {
 			char* res = malloc(strlen(map[i].morseCode) + 1);
+            if (res == NULL) {
+                fprintf(stderr, "memory allocation failed\n");
+                return " ";
+            }
 			strcpy(res, map[i].morseCode);
 			return res;
 		}
 	}
-	return strdup("");
+	return " ";
 }
 
 char* getStringMorse(char* ex) {
@@ -100,13 +104,13 @@ char* getStringMorse(char* ex) {
 		char* morse = getMorse(ex[i]);
 		size_t len = strlen(res) + strlen(morse) + 2;
 		res = realloc(res, len);
-		if (res == NULL) {
-			fprintf(stderr, "memory reallocation failed\n");
-			exit(EXIT_FAILURE);
-		}
-		strcat(res, morse);
+        if (res == NULL) {
+		    fprintf(stderr, "memory reallocation failed\n");
+    		exit(EXIT_FAILURE);
+        }
+        strcat(res, morse);
 		strcat(res, " ");
-		free(morse);
+        free(morse);
 	}
 	return res;
 }
@@ -155,8 +159,13 @@ int containsOnly(char* ex, char* tokens) {
 
 int main () {
 	printf("enter the expression:\n");
-	char text[100];
-	fgets(text, sizeof(text), stdin);
+	char *text = NULL;
+    size_t len = 0;
+	ssize_t read = getline(&text, &len, stdin);
+    if (read == -1) {
+        perror("read of name failed");
+        return EXIT_FAILURE;
+    }
 
 	char *newlinePos = strchr(text, '\n');
 	if (newlinePos != NULL) *newlinePos = '\0';
@@ -171,6 +180,7 @@ int main () {
 
 	//free up memory logic
 	free(res);
+    free(text);
 
 	return 0;
 }
