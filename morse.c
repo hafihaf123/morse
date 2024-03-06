@@ -23,7 +23,7 @@
 
 struct MorseMap {
 	char symbol;
-	char* morseCode;
+	char *morseCode;
 };
 
 struct MorseMap map[] = {
@@ -86,22 +86,16 @@ struct MorseMap map[] = {
 char* getMorse(char c) {
 	for (int i=0; i < sizeof(map) / sizeof(map[0]); i++) {
 		if (toupper(c) == map[i].symbol) {
-			char* res = malloc(strlen(map[i].morseCode) + 1);
-            if (res == NULL) {
-                fprintf(stderr, "memory allocation failed\n");
-                return " ";
-            }
-			strcpy(res, map[i].morseCode);
-			return res;
+			return map[i].morseCode;
 		}
 	}
-	return " ";
+	return "??";
 }
 
-char* getStringMorse(char* ex) {
-	char* res = strdup("");
+char* getStringMorse(char *ex) {
+	char *res = strdup("");
 	for (int i = 0; i < strlen(ex); i++) {
-		char* morse = getMorse(ex[i]);
+		char *morse = getMorse(ex[i]);
 		size_t len = strlen(res) + strlen(morse) + 2;
 		res = realloc(res, len);
         if (res == NULL) {
@@ -110,12 +104,11 @@ char* getStringMorse(char* ex) {
         }
         strcat(res, morse);
 		strcat(res, " ");
-        free(morse);
 	}
 	return res;
 }
 
-char getSymbol(char* code) {
+char getSymbol(char *code) {
 	for (int i = 0; i < sizeof(map) / sizeof(map[0]); i++) {
 		if (strcmp(code, map[i].morseCode) == 0) {
 			return map[i].symbol;
@@ -124,9 +117,9 @@ char getSymbol(char* code) {
 	return '?';
 }
 
-char* decode(char* ex) {
-	char* res = strdup("");
-	char* token = strtok(ex, " ");
+char* decode(char *ex) {
+	char *res = strdup("");
+	char *token = strtok(ex, " ");
 
 	while (token != NULL) {
 		char c = getSymbol(token);
@@ -142,7 +135,7 @@ char* decode(char* ex) {
 	return res;
 }
 
-int containsOnly(char* ex, char* tokens) {
+int containsOnly(char *ex, char *tokens) {
 	int bool = 0;
 	for (int i = 0; i < strlen(ex); i++) {
 		char c = ex[i];
@@ -170,7 +163,7 @@ int main () {
 	char *newlinePos = strchr(text, '\n');
 	if (newlinePos != NULL) *newlinePos = '\0';
 
-	char* res;
+	char *res;
 	if (containsOnly(text, ".-/")) {
 		res = decode(text);
 	} else {
