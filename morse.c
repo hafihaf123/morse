@@ -10,7 +10,7 @@
  *       Revision:  none
  *       Compiler:  gcc
  *
- *         Author:  YOUR NAME (Michal Buchman), 
+ *         Author:  Michal Buchman, 
  *   Organization:  
  *
  * =====================================================================================
@@ -98,13 +98,14 @@ char* getStringMorse(char *ex) {
 		char *morse = getMorse(ex[i]);
 		size_t len = strlen(res) + strlen(morse) + 2;
 		res = realloc(res, len);
-        if (res == NULL) {
+		if (res == NULL) {
 		    fprintf(stderr, "memory reallocation failed\n");
-    		exit(EXIT_FAILURE);
-        }
-        strcat(res, morse);
+    			exit(EXIT_FAILURE);
+        	}
+        	strcat(res, morse);
 		strcat(res, " ");
 	}
+	strcat(res, "\n");
 	return res;
 }
 
@@ -132,6 +133,7 @@ char* decode(char *ex) {
 		strncat(res, &c, 1);
 		token = strtok(NULL, " ");
 	}
+	strcat(res, "\n");
 	return res;
 }
 
@@ -150,15 +152,25 @@ int containsOnly(char *ex, char *tokens) {
 	return bool;
 }
 
-int main () {
-	printf("enter the expression:\n");
+int main (int argc, char* argv[]) {
 	char *text = NULL;
-    size_t len = 0;
-	ssize_t read = getline(&text, &len, stdin);
-    if (read == -1) {
-        perror("read of name failed");
-        return EXIT_FAILURE;
-    }
+
+	if (argc == 2) {
+		text = (char *) malloc(sizeof(argv[1])+1);
+		if (text == NULL) {
+			perror("memory allocation failed");
+			return EXIT_FAILURE;
+		}
+		strcpy(text, argv[1]);
+	} else {
+		printf("enter the expression:\n");
+		size_t len = 0;
+		ssize_t read = getline(&text, &len, stdin);
+		if (read == -1) {
+        		perror("read of name failed");
+			return EXIT_FAILURE;
+		}
+	}
 
 	char *newlinePos = strchr(text, '\n');
 	if (newlinePos != NULL) *newlinePos = '\0';
@@ -173,7 +185,7 @@ int main () {
 
 	//free up memory logic
 	free(res);
-    free(text);
+	free(text);
 
 	return 0;
 }
